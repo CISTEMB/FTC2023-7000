@@ -4,6 +4,7 @@ import com.arcrobotics.ftclib.command.CommandBase;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.subsystems.Drive;
+import org.firstinspires.ftc.teamcode.subsystems.Elevator;
 
 public class DriveWithGamepadCommand extends CommandBase {
 
@@ -38,9 +39,6 @@ public class DriveWithGamepadCommand extends CommandBase {
         turn *= 0.95;
 
         drive.arcadeDrive(forward, turn, strafe, true);
-
-
-
     }
 
     @Override
@@ -49,6 +47,6 @@ public class DriveWithGamepadCommand extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-
+        drive.stop();
     }
 }
