@@ -14,9 +14,13 @@ public class IntakeSpinComand extends CommandBase {
     }
 
     @Override
-    public void execute() {intake.rotate();}
+    public void execute(){
+        intake.rotate();
+    }
 
     @Override
-    public void end(boolean interrupted) {intake.stop();}
+    public void end(boolean interrupted){
+        intake.stop();
+    }
 
 }

@@ -1,14 +1,16 @@
-package org.firstinspires.ftc.teamcode.util;
+package org.firstinspires.ftc.teamcode;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.commands.ConveyorCommand;
 import org.firstinspires.ftc.teamcode.commands.DriveWithGamepadCommand;
 import org.firstinspires.ftc.teamcode.commands.ElevatorExtendCommand;
 import org.firstinspires.ftc.teamcode.commands.ElevatorRetractCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeSpinComand;
+import org.firstinspires.ftc.teamcode.subsystems.Conveyor;
 import org.firstinspires.ftc.teamcode.subsystems.Drive;
 import org.firstinspires.ftc.teamcode.subsystems.Elevator;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
@@ -20,6 +22,7 @@ public class DriveOpMode extends CommandOpMode {
     private Drive drive;
     private Elevator elevator;
     private Intake intake;
+    private Conveyor conveyor;
 
     @Override
     public void initialize() {
@@ -30,11 +33,12 @@ public class DriveOpMode extends CommandOpMode {
 
         elevator = new Elevator(hardwareMap, telemetry);
         intake = new Intake(hardwareMap, telemetry);
+        conveyor = new Conveyor(hardwareMap);
 
         GamepadEx driver = new GamepadEx(gamepad1);
         driver.getGamepadButton(GamepadKeys.Button.DPAD_UP).whileHeld(new ElevatorExtendCommand(elevator));
         driver.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whileHeld(new ElevatorRetractCommand(elevator));
         driver.getGamepadButton(GamepadKeys.Button.A).whileHeld(new IntakeSpinComand(intake));
-
+        driver.getGamepadButton(GamepadKeys.Button.B).whileHeld(new ConveyorCommand(conveyor));
     }
 }
