@@ -32,7 +32,7 @@ public class DriveOpMode extends CommandOpMode {
         );
 
         elevator = new Elevator(hardwareMap, telemetry);
-        intake = new Intake(hardwareMap, telemetry);
+        intake = new Intake(hardwareMap);
         conveyor = new Conveyor(hardwareMap);
 
         GamepadEx driver = new GamepadEx(gamepad1);

@@ -5,12 +5,12 @@ import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-public class IntakePivot extends SubsystemBase {
+public class FlywheelLoader extends SubsystemBase {
 
     private ServoEx servo;
 
-    public IntakePivot(HardwareMap hardwareMap){
-        servo = new SimpleServo(hardwareMap, "intakePivot", 0, 270);
+    public FlywheelLoader(HardwareMap hardwareMap){
+        servo = new SimpleServo(hardwareMap, "loader", 0, 270);
         servo.setInverted(false);
     }
 
@@ -20,6 +20,7 @@ public class IntakePivot extends SubsystemBase {
 
     @Override
     public void periodic(){
+
     }
 
 }

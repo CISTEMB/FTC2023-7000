@@ -17,7 +17,7 @@ public class Elevator extends SubsystemBase {
     private TouchSensor bottomLimit;
 
     public Elevator(HardwareMap hm, Telemetry tm){
-        motor = hm.get(DcMotorEx.class, "elevator");
+        motor = hm.get(DcMotorEx.class, "elevatorMotor");
         motor.setDirection(DcMotorSimple.Direction.FORWARD);
         motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         bottomLimit = hm.get(TouchSensor.class, "bl");

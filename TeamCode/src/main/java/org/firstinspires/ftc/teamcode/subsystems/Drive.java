@@ -17,10 +17,10 @@ public class Drive extends SubsystemBase {
     public Drive(HardwareMap hardwareMap, Telemetry t){
         this.t = t;
 
-        leftFrontMotor = hardwareMap.get(DcMotor.class, "leftFrontMotor");
-        leftBackMotor = hardwareMap.get(DcMotor.class, "leftBackMotor");
-        rightFrontMotor = hardwareMap.get(DcMotor.class, "rightFrontMotor");
-        rightBackMotor = hardwareMap.get(DcMotor.class, "rightBackMotor");
+        leftFrontMotor = hardwareMap.get(DcMotor.class, "frontLeftMotor");
+        leftBackMotor = hardwareMap.get(DcMotor.class, "backLeftMotor");
+        rightFrontMotor = hardwareMap.get(DcMotor.class, "frontRightMotor");
+        rightBackMotor = hardwareMap.get(DcMotor.class, "backRightMotor");
 
         leftFrontMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         leftBackMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
