@@ -1,14 +1,15 @@
 package org.firstinspires.ftc.teamcode.commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
-import org.firstinspires.ftc.teamcode.subsystems.IntakePivot;
 
-public class SetIntakeAngleCommand extends CommandBase {
+import org.firstinspires.ftc.teamcode.subsystems.PixelDoohickey;
 
-    private IntakePivot pivot;
+public class SetPixelDoohickeyAngleCommand extends CommandBase {
+
+    private PixelDoohickey pivot;
     private double angle;
 
-    public SetIntakeAngleCommand(IntakePivot pivot, double angle){
+    public SetPixelDoohickeyAngleCommand(PixelDoohickey pivot, double angle){
         this.pivot = pivot;
         this.angle = angle;
         addRequirements(pivot);
@@ -32,5 +33,4 @@ public class SetIntakeAngleCommand extends CommandBase {
     @Override
     public void end(boolean interrupted) {
     }
-
 }

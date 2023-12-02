@@ -31,7 +31,7 @@ public class Elevator extends SubsystemBase {
             brake();
         }else {
             motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            motor.setPower(0.2);
+            motor.setPower(0.5);
         }
     }
 
@@ -42,7 +42,7 @@ public class Elevator extends SubsystemBase {
             brake();
         }else {
             motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            motor.setPower(-0.2);
+            motor.setPower(-0.5);
         }
     }
 
@@ -61,6 +61,18 @@ public class Elevator extends SubsystemBase {
     }
 
     public boolean isExtended(){
-        return getDistance() >= 2000;
+        return getDistance() >= 1750;
+    }
+
+    @Override
+    public void periodic() {
+        telemetry.addData("ElevatorIsRetracted", isRetracted());
+        telemetry.addData("ElevatorIsExtended", isExtended());
+        telemetry.addData("ElevatorDistance", getDistance());
+        telemetry.update();
+
+        if (isRetracted()) {
+            motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        }
     }
 }

@@ -2,14 +2,14 @@ package org.firstinspires.ftc.teamcode.commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 
-import org.firstinspires.ftc.teamcode.subsystems.FlywheelLoader;
+import org.firstinspires.ftc.teamcode.subsystems.DroneLoader;
 
-public class SetLoaderAngleCommand extends CommandBase {
+public class SetDroneLoaderAngleCommand extends CommandBase {
 
-    private FlywheelLoader pivot;
+    private DroneLoader pivot;
     private double angle;
 
-    public SetLoaderAngleCommand(FlywheelLoader pivot, double angle){
+    public SetDroneLoaderAngleCommand(DroneLoader pivot, double angle){
         this.pivot = pivot;
         this.angle = angle;
         addRequirements(pivot);

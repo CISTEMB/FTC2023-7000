@@ -15,20 +15,19 @@ public class Intake extends SubsystemBase {
     public Intake(HardwareMap hm){
 
         motor = hm.get(DcMotorEx.class, "intakeMotor");
-        motor.setDirection(DcMotorSimple.Direction.FORWARD);
+        motor.setDirection(DcMotorSimple.Direction.REVERSE);
         motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
     public void rotate(){
-        //telemetry.addData("IntakeState", "spinning");
-
         motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motor.setPower(0.5);
+        motor.setPower(1);
     }
-
     public void stop(){
-        //telemetry.addData("IntakeState", "stop");
-
         motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motor.setPower(0);
+    }
+    public void eject(){
+        motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motor.setPower(-1);
     }
 }

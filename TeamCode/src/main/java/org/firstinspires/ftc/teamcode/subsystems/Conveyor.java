@@ -17,7 +17,7 @@ public class Conveyor extends SubsystemBase {
 
         conveyorMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        conveyorMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        conveyorMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         conveyorMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
@@ -25,9 +25,10 @@ public class Conveyor extends SubsystemBase {
     public void up(){
         conveyorMotor.setPower(1);
     }
-
     public void stop(){
         conveyorMotor.setPower(0);
     }
-
+    public void down(){
+        conveyorMotor.setPower(-1);
+    }
 }
