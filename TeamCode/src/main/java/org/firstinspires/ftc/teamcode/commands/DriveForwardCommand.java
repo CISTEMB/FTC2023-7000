@@ -12,7 +12,8 @@ public class DriveForwardCommand extends CommandBase {
     private Telemetry t;
     private boolean isFinished;
 
-    public DriveForwardCommand(Telemetry t, Drive drive, double goal, double power) {
+    public
+    DriveForwardCommand(Telemetry t, Drive drive, double goal, double power) {
         this.drive = drive;
         this.goal = goal;
         this.power = power;

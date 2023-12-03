@@ -54,8 +54,9 @@ public class DriveOpMode extends CommandOpMode {
 
         GamepadEx driver = new GamepadEx(gamepad1);
         driver.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whileHeld(new IntakeSpinComand(intake));
-        driver.getGamepadButton(GamepadKeys.Button.BACK).whileHeld(new InstantCommand(pdivot::drop, pdivot));
         driver.getGamepadButton(GamepadKeys.Button.Y).whileHeld(new InstantCommand(conveyor::stop, conveyor));
+        driver.getGamepadButton(GamepadKeys.Button.BACK).whileHeld(new InstantCommand(conveyor::down, conveyor).alongWith(new InstantCommand(intake::eject, intake)));
+//        driver.getGamepadButton(GamepadKeys.Button.BACK).whileHeld(new InstantCommand(pdivot::drop, pdivot));
 
         GamepadEx driver2 = new GamepadEx(gamepad2);
         driver2.getGamepadButton(GamepadKeys.Button.DPAD_UP).whileHeld(new ElevatorExtendCommand(elevator));
@@ -64,7 +65,5 @@ public class DriveOpMode extends CommandOpMode {
         driver2.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).toggleWhenPressed(new RunCommand(pivot::score, pivot));
         driver2.getGamepadButton(GamepadKeys.Button.A).whenPressed(new RunCommand(clamp::close, clamp));
         driver2.getGamepadButton(GamepadKeys.Button.B).whenPressed(new RunCommand(clamp::open, clamp));
-
-        driver2.getGamepadButton(GamepadKeys.Button.BACK).whileHeld(new InstantCommand(conveyor::down, conveyor).alongWith(new InstantCommand(intake::eject, intake)));
     }
 }
