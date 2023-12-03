@@ -15,7 +15,7 @@ public class Intake extends SubsystemBase {
     public Intake(HardwareMap hm){
 
         motor = hm.get(DcMotorEx.class, "intakeMotor");
-        motor.setDirection(DcMotorSimple.Direction.REVERSE);
+        motor.setDirection(DcMotorSimple.Direction.FORWARD);
         motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
     public void rotate(){
