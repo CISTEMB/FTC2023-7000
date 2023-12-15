@@ -15,7 +15,7 @@ public class Conveyor extends SubsystemBase {
     public Conveyor(HardwareMap hardwareMap){
         conveyorMotor = hardwareMap.get(DcMotor.class, "conveyorMotor");
 
-        conveyorMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        conveyorMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         conveyorMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
