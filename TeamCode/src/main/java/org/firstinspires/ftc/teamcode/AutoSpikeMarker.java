@@ -7,9 +7,9 @@ import org.firstinspires.ftc.teamcode.commands.DriveForwardCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Clamp;
 import org.firstinspires.ftc.teamcode.subsystems.Drive;
 
-@Autonomous(name = "Auto")
+@Autonomous(name = "Auto-Spike")
 
-public class Auto extends CommandOpMode {
+public class AutoSpikeMarker extends CommandOpMode {
 
     private Drive drive;
     private Clamp clamp;
