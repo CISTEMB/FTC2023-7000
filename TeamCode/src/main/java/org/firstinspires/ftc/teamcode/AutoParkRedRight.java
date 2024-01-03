@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import android.drm.DrmStore;
-
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
@@ -9,30 +7,26 @@ import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
-import com.arcrobotics.ftclib.command.PrintCommand;
 import com.arcrobotics.ftclib.command.RunCommand;
 import com.arcrobotics.ftclib.command.SelectCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.commands.DriveForwardCommand;
 import org.firstinspires.ftc.teamcode.commands.roadrunner.TrajectoryFollowerCommand;
 import org.firstinspires.ftc.teamcode.commands.roadrunner.TurnCommand;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Clamp;
 import org.firstinspires.ftc.teamcode.subsystems.Conveyor;
-import org.firstinspires.ftc.teamcode.subsystems.Drive;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.MecanumDriveSubsystem;
 
 import java.util.HashMap;
 
-@Autonomous(name = "Auto-Park")
+@Autonomous(name = "Auto-Park-Red-Right")
 
-public class AutoPark extends CommandOpMode {
+public class AutoParkRedRight extends CommandOpMode {
 
     private MecanumDriveSubsystem drive;
     private Clamp clamp;
@@ -60,15 +54,15 @@ public class AutoPark extends CommandOpMode {
 
         Trajectory toRigging = drive.trajectoryBuilder(startingPosition)
                 .forward(8)
-                .splineTo(new Vector2d(26, 1.5), Math.toRadians(0))
+                .splineTo(new Vector2d(26, -1.5), Math.toRadians(0))
                 .forward(3)
                 .build();
 
-        Trajectory scoreLeft = drive.trajectoryBuilder(new Pose2d(toRigging.end().getX(),toRigging.end().getY(),Math.toRadians(90)))
+        Trajectory scoreLeft = drive.trajectoryBuilder(new Pose2d(toRigging.end().getX(),toRigging.end().getY(),Math.toRadians(-90)))
                         .forward(2)
                         .build();
         Trajectory scoreRight = drive.trajectoryBuilder(new Pose2d(toRigging.end().getX(),toRigging.end().getY(),Math.toRadians(-90)))
-                .forward(1.5)
+                .forward(-1.5)
                 .build();
         Trajectory scoreCenter = drive.trajectoryBuilder(toRigging.end())
                 .back(1)
@@ -78,7 +72,7 @@ public class AutoPark extends CommandOpMode {
                 new SelectCommand(
                         new HashMap<Object, Command>(){{
                             put(0, new SequentialCommandGroup(
-                                    new TurnCommand(drive, Math.toRadians(95)),
+                                    new TurnCommand(drive, Math.toRadians(-95)),
                                     new TrajectoryFollowerCommand(drive, scoreLeft)
                             ) );
                             put(1, new TrajectoryFollowerCommand(drive, scoreCenter));
