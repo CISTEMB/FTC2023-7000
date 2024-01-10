@@ -40,6 +40,7 @@ public abstract class AutoOpModeBase extends CommandOpMode {
     }
 
     protected Trajectory scoreLeft;
+    protected Trajectory scoreLeft2;
     protected Trajectory scoreCenter;
     protected Trajectory scoreCenter2;
     protected Trajectory scoreRight;
@@ -80,7 +81,10 @@ public abstract class AutoOpModeBase extends CommandOpMode {
                 .build();
 
         scoreLeft = drive.trajectoryBuilder(new Pose2d(toRigging.end().getX(), toRigging.end().getY(), Math.toRadians(90 * invertTurn)))
-                .forward(2)
+                .back(6.5)
+                .build();
+        scoreLeft2 = drive.trajectoryBuilder(scoreLeft.end())
+                .strafeRight(12)
                 .build();
         scoreRight = drive.trajectoryBuilder(new Pose2d(toRigging.end().getX(), toRigging.end().getY(), Math.toRadians(90 * invertTurn)))
                 .back(6.5)
@@ -107,7 +111,10 @@ public abstract class AutoOpModeBase extends CommandOpMode {
                         new HashMap<Object, Command>(){{
                             put(0, new SequentialCommandGroup(
                                     new TurnCommand(drive, Math.toRadians(95 * finalInvertTurn)),
-                                    new TrajectoryFollowerCommand(drive, scoreLeft)
+                                    new TrajectoryFollowerCommand(drive, scoreLeft),
+                                    new RunCommand(pixelPlacer::dropPixel, pixelPlacer).withTimeout(1000),
+                                    new TrajectoryFollowerCommand(drive, scoreLeft2)
+
                             ) );
                             put(1, new SequentialCommandGroup(
                                     new TurnCommand(drive, Math.toRadians(95 * finalInvertTurn)),
