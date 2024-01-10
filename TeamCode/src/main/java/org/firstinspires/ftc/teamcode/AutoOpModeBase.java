@@ -41,9 +41,9 @@ public abstract class AutoOpModeBase extends CommandOpMode {
 
     protected Trajectory scoreLeft;
     protected Trajectory scoreCenter;
+    protected Trajectory scoreCenter2;
     protected Trajectory scoreRight;
     protected Trajectory toRigging;
-    protected Trajectory scoreCenterBackdrop;
 
     @Override
     public void initialize() {
@@ -68,6 +68,8 @@ public abstract class AutoOpModeBase extends CommandOpMode {
         leftDistanceSensor = hardwareMap.get(DistanceSensor.class, "leftDistanceSensor");
         rightDistanceSensor = hardwareMap.get(DistanceSensor.class, "rightDistanceSensor");
 
+        pixelPlacer = new PixelPlacer(hardwareMap);
+
         Pose2d startingPosition = new Pose2d(0, 0, 0);
         drive.setPoseEstimate(startingPosition);
 
@@ -81,14 +83,15 @@ public abstract class AutoOpModeBase extends CommandOpMode {
                 .forward(2)
                 .build();
         scoreRight = drive.trajectoryBuilder(new Pose2d(toRigging.end().getX(), toRigging.end().getY(), Math.toRadians(90 * invertTurn)))
-                .forward(-1.5)
+                .back(6.5)
                 .build();
-        scoreCenter = drive.trajectoryBuilder(toRigging.end(), Math.toRadians(90 * invertTurn))
-                .back(1)
+        scoreCenter = drive.trajectoryBuilder(new Pose2d(toRigging.end().getX(), toRigging.end().getY(), Math.toRadians(90 * invertTurn)))
+                .strafeLeft(8)
                 .build();
-        scoreCenterBackdrop = drive.trajectoryBuilder(scoreCenter.end())
-                .back(34)
+        scoreCenter2 = drive.trajectoryBuilder(scoreCenter.end())
+                .strafeRight(12)
                 .build();
+
     }
 
     public Command scorePurplePixle(){
@@ -107,8 +110,10 @@ public abstract class AutoOpModeBase extends CommandOpMode {
                                     new TrajectoryFollowerCommand(drive, scoreLeft)
                             ) );
                             put(1, new SequentialCommandGroup(
+                                    new TurnCommand(drive, Math.toRadians(95 * finalInvertTurn)),
                                     new TrajectoryFollowerCommand(drive, scoreCenter),
-                                    new TurnCommand(drive, Math.toRadians(95 * finalInvertTurn))
+                                    new RunCommand(pixelPlacer::dropPixel, pixelPlacer).withTimeout(1000),
+                                    new TrajectoryFollowerCommand(drive, scoreCenter2)
                             ));
                             put(2, new SequentialCommandGroup(
                                     new TurnCommand(drive, Math.toRadians(95 * finalInvertTurn)),
@@ -124,14 +129,7 @@ public abstract class AutoOpModeBase extends CommandOpMode {
                                 return 1;
                             }
                         }
-                ),
-                new ParallelCommandGroup(
-                        new RunCommand(intake::eject),
-                        new RunCommand(conveyor::down)
-                ).withTimeout(2000),
-                new InstantCommand(intake::stop),
-                new InstantCommand(conveyor::stop)
-
+                )
         );
     }
 }

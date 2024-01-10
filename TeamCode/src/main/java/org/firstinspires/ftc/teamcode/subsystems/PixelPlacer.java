@@ -20,7 +20,9 @@ public class PixelPlacer extends SubsystemBase {
     public void dropPixel(){
         setAngle(180);
     }
-
+    public void holdPixel(){
+        setAngle(0);
+    }
     @Override
     public void periodic(){
     }

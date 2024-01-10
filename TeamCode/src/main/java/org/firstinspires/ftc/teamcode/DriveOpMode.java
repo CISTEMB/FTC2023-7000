@@ -27,6 +27,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Lift;
 import org.firstinspires.ftc.teamcode.subsystems.LiftPivot;
 import org.firstinspires.ftc.teamcode.subsystems.PixelDoohickey;
+import org.firstinspires.ftc.teamcode.subsystems.PixelPlacer;
 
 @TeleOp(name = "TeleOp")
 
@@ -41,6 +42,7 @@ public class DriveOpMode extends CommandOpMode {
     private ClampPivot pivot;
     private LiftPivot liftPivot;
     private Clamp clamp;
+    private PixelPlacer placer;
 
     @Override
     public void initialize() {
@@ -61,6 +63,7 @@ public class DriveOpMode extends CommandOpMode {
         pivot.setDefaultCommand(new RunCommand(pivot::stow, pivot));
         liftPivot = new LiftPivot(hardwareMap, elevator);
         clamp = new Clamp(hardwareMap);
+        placer = new PixelPlacer(hardwareMap);
 
         GamepadEx driver = new GamepadEx(gamepad1);
         driver.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whileHeld(new IntakeSpinComand(intake));
@@ -82,6 +85,7 @@ public class DriveOpMode extends CommandOpMode {
         driver2.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).toggleWhenPressed(new RunCommand(pivot::score, pivot));
         driver2.getGamepadButton(GamepadKeys.Button.A).whenPressed(new RunCommand(clamp::close, clamp));
         driver2.getGamepadButton(GamepadKeys.Button.B).whenPressed(new RunCommand(clamp::open, clamp));
-
+        driver2.getGamepadButton(GamepadKeys.Button.X).whenPressed(new RunCommand(placer::dropPixel, placer));
+        driver2.getGamepadButton(GamepadKeys.Button.Y).whenPressed(new RunCommand(placer::holdPixel, placer));
     }
 }
