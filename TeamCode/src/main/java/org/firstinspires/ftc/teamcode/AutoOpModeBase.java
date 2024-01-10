@@ -5,8 +5,10 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandOpMode;
+import com.arcrobotics.ftclib.command.ConditionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
+import com.arcrobotics.ftclib.command.PrintCommand;
 import com.arcrobotics.ftclib.command.RunCommand;
 import com.arcrobotics.ftclib.command.SelectCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
@@ -41,9 +43,12 @@ public abstract class AutoOpModeBase extends CommandOpMode {
 
     protected Trajectory scoreLeft;
     protected Trajectory scoreLeft2;
+    protected Trajectory scoreleft1andAHalf;
     protected Trajectory scoreCenter;
     protected Trajectory scoreCenter2;
     protected Trajectory scoreRight;
+    protected Trajectory scoreRight2;
+    protected Trajectory scoreRight3;
     protected Trajectory toRigging;
 
     @Override
@@ -80,14 +85,48 @@ public abstract class AutoOpModeBase extends CommandOpMode {
                 .forward(3)
                 .build();
 
-        scoreLeft = drive.trajectoryBuilder(new Pose2d(toRigging.end().getX(), toRigging.end().getY(), Math.toRadians(90 * invertTurn)))
-                .back(6.5)
+        if (redCorner) {
+            scoreLeft = drive.trajectoryBuilder(new Pose2d(toRigging.end().getX(), toRigging.end().getY(), Math.toRadians(90 * invertTurn)))
+                    .back(9)
+                    .build();
+        } else {
+            scoreLeft = drive.trajectoryBuilder(new Pose2d(toRigging.end().getX(), toRigging.end().getY(), Math.toRadians(90 * invertTurn)))
+                    .back(6.5)
+                    .build();
+        }
+
+        scoreleft1andAHalf = drive.trajectoryBuilder(scoreLeft.end())
+                .back(2)
                 .build();
-        scoreLeft2 = drive.trajectoryBuilder(scoreLeft.end())
-                .strafeRight(12)
+
+        if (redCorner) {
+            scoreLeft2 = drive.trajectoryBuilder(scoreleft1andAHalf.end())
+                    .forward(12)
+                    .build();
+        }
+
+        else{
+            scoreLeft2 = drive.trajectoryBuilder(scoreLeft.end())
+                    .strafeRight(12)
+                    .build();
+        }
+
+        if (redCorner) {
+            scoreRight = drive.trajectoryBuilder(new Pose2d(toRigging.end().getX(), toRigging.end().getY(), Math.toRadians(-90 * invertTurn)))
+                    .back(7.5)
+                    .build();
+
+        } else {
+            scoreRight = drive.trajectoryBuilder(new Pose2d(toRigging.end().getX(), toRigging.end().getY(), Math.toRadians(-90 * invertTurn)))
+                    .back(9)
+                    .build();
+
+        }
+        scoreRight2 = drive.trajectoryBuilder(scoreRight.end())
+                .back(2)
                 .build();
-        scoreRight = drive.trajectoryBuilder(new Pose2d(toRigging.end().getX(), toRigging.end().getY(), Math.toRadians(90 * invertTurn)))
-                .back(6.5)
+        scoreRight3 = drive.trajectoryBuilder(scoreRight2.end())
+                .forward(24)
                 .build();
         scoreCenter = drive.trajectoryBuilder(new Pose2d(toRigging.end().getX(), toRigging.end().getY(), Math.toRadians(90 * invertTurn)))
                 .strafeLeft(8)
@@ -113,6 +152,7 @@ public abstract class AutoOpModeBase extends CommandOpMode {
                                     new TurnCommand(drive, Math.toRadians(95 * finalInvertTurn)),
                                     new TrajectoryFollowerCommand(drive, scoreLeft),
                                     new RunCommand(pixelPlacer::dropPixel, pixelPlacer).withTimeout(1000),
+                                    new ConditionalCommand(new TrajectoryFollowerCommand(drive, scoreleft1andAHalf), new PrintCommand("NA"), ()->redCorner),
                                     new TrajectoryFollowerCommand(drive, scoreLeft2)
 
                             ) );
@@ -123,8 +163,11 @@ public abstract class AutoOpModeBase extends CommandOpMode {
                                     new TrajectoryFollowerCommand(drive, scoreCenter2)
                             ));
                             put(2, new SequentialCommandGroup(
-                                    new TurnCommand(drive, Math.toRadians(95 * finalInvertTurn)),
-                                    new TrajectoryFollowerCommand(drive, scoreRight)
+                                    new TurnCommand(drive, Math.toRadians(-95 * finalInvertTurn)),
+                                    new TrajectoryFollowerCommand(drive, scoreRight),
+                                    new RunCommand(pixelPlacer::dropPixel, pixelPlacer).withTimeout(1000),
+                                    new TrajectoryFollowerCommand(drive, scoreRight2),
+                                    new TrajectoryFollowerCommand(drive, scoreRight3)
                             ));
                         }},
                         ()->{
