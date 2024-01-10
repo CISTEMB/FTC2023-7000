@@ -20,6 +20,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Clamp;
 import org.firstinspires.ftc.teamcode.subsystems.Conveyor;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.MecanumDriveSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.PixelPlacer;
 
 import java.util.HashMap;
 
@@ -30,6 +31,7 @@ public abstract class AutoOpModeBase extends CommandOpMode {
     protected Conveyor conveyor;
     protected DistanceSensor rightDistanceSensor;
     protected DistanceSensor leftDistanceSensor;
+    protected PixelPlacer pixelPlacer;
     protected final boolean redCorner;
     protected final boolean redAlliance;
     protected AutoOpModeBase(boolean redCorner, boolean redAlliance){
@@ -41,6 +43,7 @@ public abstract class AutoOpModeBase extends CommandOpMode {
     protected Trajectory scoreCenter;
     protected Trajectory scoreRight;
     protected Trajectory toRigging;
+    protected Trajectory scoreCenterBackdrop;
 
     @Override
     public void initialize() {
@@ -80,8 +83,11 @@ public abstract class AutoOpModeBase extends CommandOpMode {
         scoreRight = drive.trajectoryBuilder(new Pose2d(toRigging.end().getX(), toRigging.end().getY(), Math.toRadians(90 * invertTurn)))
                 .forward(-1.5)
                 .build();
-        scoreCenter = drive.trajectoryBuilder(toRigging.end())
+        scoreCenter = drive.trajectoryBuilder(toRigging.end(), Math.toRadians(90 * invertTurn))
                 .back(1)
+                .build();
+        scoreCenterBackdrop = drive.trajectoryBuilder(scoreCenter.end())
+                .back(34)
                 .build();
     }
 
@@ -100,7 +106,10 @@ public abstract class AutoOpModeBase extends CommandOpMode {
                                     new TurnCommand(drive, Math.toRadians(95 * finalInvertTurn)),
                                     new TrajectoryFollowerCommand(drive, scoreLeft)
                             ) );
-                            put(1, new TrajectoryFollowerCommand(drive, scoreCenter));
+                            put(1, new SequentialCommandGroup(
+                                    new TrajectoryFollowerCommand(drive, scoreCenter),
+                                    new TurnCommand(drive, Math.toRadians(95 * finalInvertTurn))
+                            ));
                             put(2, new SequentialCommandGroup(
                                     new TurnCommand(drive, Math.toRadians(95 * finalInvertTurn)),
                                     new TrajectoryFollowerCommand(drive, scoreRight)

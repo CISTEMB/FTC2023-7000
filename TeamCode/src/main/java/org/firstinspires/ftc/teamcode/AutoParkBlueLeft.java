@@ -16,11 +16,9 @@ public class AutoParkBlueLeft extends AutoOpModeBase {
         super.initialize();
         schedule(new SequentialCommandGroup(
                scorePurplePixle()
-
         ));
 
     }
-
     @Override
     public void run() {
         super.run();
