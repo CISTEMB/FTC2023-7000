@@ -26,7 +26,7 @@ import java.util.HashMap;
 
 @Autonomous(name = "Auto-Park-Red-Left")
 
-public class AutoParkRedLeft extends AutoOpModeBase {
+public class AutoParkRedLeft extends AutoOpModeBaseRed {
 
     public AutoParkRedLeft(){
         super(false, true);
