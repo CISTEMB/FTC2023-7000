@@ -138,18 +138,13 @@ public abstract class AutoOpModeBase extends CommandOpMode {
     }
 
     public Command scorePurplePixle(){
-        double invertTurn = 1;
-        if(!redAlliance){
-            invertTurn = -1;
-        }
 
-        double finalInvertTurn = invertTurn;
         return new SequentialCommandGroup(
                 new TrajectoryFollowerCommand(drive, toRigging),
                 new SelectCommand(
                         new HashMap<Object, Command>(){{
                             put(0, new SequentialCommandGroup(
-                                    new TurnCommand(drive, Math.toRadians(95 * finalInvertTurn)),
+                                    new TurnCommand(drive, Math.toRadians(-95)),
                                     new TrajectoryFollowerCommand(drive, scoreLeft),
                                     new RunCommand(pixelPlacer::dropPixel, pixelPlacer).withTimeout(1000),
                                     new ConditionalCommand(new TrajectoryFollowerCommand(drive, scoreleft1andAHalf), new PrintCommand("NA"), ()->redCorner),
@@ -157,13 +152,13 @@ public abstract class AutoOpModeBase extends CommandOpMode {
 
                             ) );
                             put(1, new SequentialCommandGroup(
-                                    new TurnCommand(drive, Math.toRadians(95 * finalInvertTurn)),
+                                    new TurnCommand(drive, Math.toRadians(-95)),
                                     new TrajectoryFollowerCommand(drive, scoreCenter),
                                     new RunCommand(pixelPlacer::dropPixel, pixelPlacer).withTimeout(1000),
                                     new TrajectoryFollowerCommand(drive, scoreCenter2)
                             ));
                             put(2, new SequentialCommandGroup(
-                                    new TurnCommand(drive, Math.toRadians(-95 * finalInvertTurn)),
+                                    new TurnCommand(drive, Math.toRadians(95)),
                                     new TrajectoryFollowerCommand(drive, scoreRight),
                                     new RunCommand(pixelPlacer::dropPixel, pixelPlacer).withTimeout(1000),
                                     new TrajectoryFollowerCommand(drive, scoreRight2),
