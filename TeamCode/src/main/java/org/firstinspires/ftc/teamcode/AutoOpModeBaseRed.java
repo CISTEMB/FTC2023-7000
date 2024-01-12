@@ -6,6 +6,7 @@ import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.ConditionalCommand;
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.PrintCommand;
 import com.arcrobotics.ftclib.command.RunCommand;
 import com.arcrobotics.ftclib.command.SelectCommand;
@@ -34,6 +35,9 @@ public abstract class AutoOpModeBaseRed extends CommandOpMode {
     protected PixelPlacer pixelPlacer;
     protected final boolean redCorner;
     protected final boolean redAlliance;
+
+    protected int headSpot;
+
     protected AutoOpModeBaseRed(boolean redCorner, boolean redAlliance){
         this.redCorner = redCorner;
         this.redAlliance =redAlliance;
@@ -154,6 +158,7 @@ public abstract class AutoOpModeBaseRed extends CommandOpMode {
                 new SelectCommand(
                         new HashMap<Object, Command>(){{
                             put(0, new SequentialCommandGroup(
+                                    new InstantCommand(()-> headSpot = 0),
                                     new TurnCommand(drive, Math.toRadians(-95)),
                                     new TrajectoryFollowerCommand(drive, scoreLeft),
                                     new RunCommand(pixelPlacer::dropPixel, pixelPlacer).withTimeout(1000),
@@ -162,6 +167,7 @@ public abstract class AutoOpModeBaseRed extends CommandOpMode {
 
                             ) );
                             put(1, new SequentialCommandGroup(
+                                    new InstantCommand(()-> headSpot = 1),
                                     new TurnCommand(drive, Math.toRadians(95)),
                                     new TrajectoryFollowerCommand(drive, scoreCenter),
                                     new RunCommand(pixelPlacer::dropPixel, pixelPlacer).withTimeout(1000),
@@ -171,6 +177,7 @@ public abstract class AutoOpModeBaseRed extends CommandOpMode {
 
                             ));
                             put(2, new SequentialCommandGroup(
+                                    new InstantCommand(()-> headSpot = 2),
                                     new TurnCommand(drive, Math.toRadians(95)),
                                     new TrajectoryFollowerCommand(drive, scoreRight),
                                     new RunCommand(pixelPlacer::dropPixel, pixelPlacer).withTimeout(1000),
