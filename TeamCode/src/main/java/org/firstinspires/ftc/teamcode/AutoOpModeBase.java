@@ -19,8 +19,11 @@ import org.firstinspires.ftc.teamcode.commands.roadrunner.TrajectoryFollowerComm
 import org.firstinspires.ftc.teamcode.commands.roadrunner.TurnCommand;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Clamp;
+import org.firstinspires.ftc.teamcode.subsystems.ClampPivot;
 import org.firstinspires.ftc.teamcode.subsystems.Conveyor;
+import org.firstinspires.ftc.teamcode.subsystems.Elevator;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.subsystems.LiftPivot;
 import org.firstinspires.ftc.teamcode.subsystems.MecanumDriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.PixelPlacer;
 
@@ -34,8 +37,13 @@ public abstract class AutoOpModeBase extends CommandOpMode {
     protected DistanceSensor rightDistanceSensor;
     protected DistanceSensor leftDistanceSensor;
     protected PixelPlacer pixelPlacer;
+
+    protected Elevator elevator;
+    protected LiftPivot liftPivot;
+    protected ClampPivot clampPivot;
     protected final boolean redCorner;
     protected final boolean redAlliance;
+    protected int headSpot;
     protected AutoOpModeBase(boolean redCorner, boolean redAlliance){
         this.redCorner = redCorner;
         this.redAlliance =redAlliance;
@@ -75,6 +83,13 @@ public abstract class AutoOpModeBase extends CommandOpMode {
         rightDistanceSensor = hardwareMap.get(DistanceSensor.class, "rightDistanceSensor");
 
         pixelPlacer = new PixelPlacer(hardwareMap);
+
+        elevator = new Elevator(hardwareMap, telemetry);
+
+        liftPivot = new LiftPivot(hardwareMap, elevator);
+
+        clampPivot = new ClampPivot(hardwareMap, elevator);
+
 
         Pose2d startingPosition = new Pose2d(0, 0, 0);
         drive.setPoseEstimate(startingPosition);
@@ -144,6 +159,7 @@ public abstract class AutoOpModeBase extends CommandOpMode {
                 new SelectCommand(
                         new HashMap<Object, Command>(){{
                             put(0, new SequentialCommandGroup(
+                                    new InstantCommand(()-> headSpot = 0),
                                     new TurnCommand(drive, Math.toRadians(-95)),
                                     new TrajectoryFollowerCommand(drive, scoreLeft),
                                     new RunCommand(pixelPlacer::dropPixel, pixelPlacer).withTimeout(1000),
@@ -152,12 +168,14 @@ public abstract class AutoOpModeBase extends CommandOpMode {
 
                             ) );
                             put(1, new SequentialCommandGroup(
+                                    new InstantCommand(()-> headSpot = 1),
                                     new TurnCommand(drive, Math.toRadians(-95)),
                                     new TrajectoryFollowerCommand(drive, scoreCenter),
                                     new RunCommand(pixelPlacer::dropPixel, pixelPlacer).withTimeout(1000),
                                     new TrajectoryFollowerCommand(drive, scoreCenter2)
                             ));
                             put(2, new SequentialCommandGroup(
+                                    new InstantCommand(()-> headSpot = 2),
                                     new TurnCommand(drive, Math.toRadians(95)),
                                     new TrajectoryFollowerCommand(drive, scoreRight),
                                     new RunCommand(pixelPlacer::dropPixel, pixelPlacer).withTimeout(1000),
