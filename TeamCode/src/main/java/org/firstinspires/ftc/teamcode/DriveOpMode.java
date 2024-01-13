@@ -28,6 +28,8 @@ import org.firstinspires.ftc.teamcode.subsystems.Lift;
 import org.firstinspires.ftc.teamcode.subsystems.LiftPivot;
 import org.firstinspires.ftc.teamcode.subsystems.PixelDoohickey;
 import org.firstinspires.ftc.teamcode.subsystems.PixelPlacer;
+import org.firstinspires.ftc.teamcode.subsystems.DroneLauncher;
+import org.firstinspires.ftc.teamcode.commands.ShootDrone;
 
 @TeleOp(name = "TeleOp")
 
@@ -43,6 +45,7 @@ public class DriveOpMode extends CommandOpMode {
     private LiftPivot liftPivot;
     private Clamp clamp;
     private PixelPlacer placer;
+    private DroneLauncher shooter;
 
     @Override
     public void initialize() {
@@ -64,6 +67,7 @@ public class DriveOpMode extends CommandOpMode {
         liftPivot = new LiftPivot(hardwareMap, elevator);
         clamp = new Clamp(hardwareMap);
         placer = new PixelPlacer(hardwareMap);
+        shooter = new DroneLauncher(hardwareMap);
 
         GamepadEx driver = new GamepadEx(gamepad1);
         driver.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whileHeld(new IntakeSpinComand(intake));
@@ -87,5 +91,6 @@ public class DriveOpMode extends CommandOpMode {
         driver2.getGamepadButton(GamepadKeys.Button.B).whenPressed(new RunCommand(clamp::open, clamp));
         driver2.getGamepadButton(GamepadKeys.Button.X).whenPressed(new RunCommand(placer::dropPixel, placer));
         driver2.getGamepadButton(GamepadKeys.Button.Y).whenPressed(new RunCommand(placer::holdPixel, placer));
+        driver2.getGamepadButton(GamepadKeys.Button.B).and(driver2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)).whenActive(new RunCommand(shooter::shoot, shooter));
     }
 }
