@@ -101,7 +101,7 @@ public abstract class AutoOpModeBase extends CommandOpMode {
 
         if (redCorner) {
             scoreLeft2 = drive.trajectoryBuilder(scoreleft1andAHalf.end())
-                    .forward(12)
+                    .forward(20)
                     .build();
         }
 

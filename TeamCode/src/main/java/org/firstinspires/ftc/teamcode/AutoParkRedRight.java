@@ -18,6 +18,7 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.commands.ElevatorExtendCommand;
+import org.firstinspires.ftc.teamcode.commands.ElevatorRetractCommand;
 import org.firstinspires.ftc.teamcode.commands.roadrunner.TrajectoryFollowerCommand;
 import org.firstinspires.ftc.teamcode.commands.roadrunner.TurnCommand;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
@@ -44,13 +45,13 @@ public class AutoParkRedRight extends AutoOpModeBaseRed {
         super.initialize();
 
         headSpot0 = drive.trajectoryBuilder(scoreLeft2.end(), true)
-                .splineTo(new Vector2d(41, -40), Math.toRadians(-90))
+                .splineTo(new Vector2d(36, -40), Math.toRadians(-90))
                 .build();
         headSpot1 = drive.trajectoryBuilder(scoreCenter4.end(), true)
-                .splineTo(new Vector2d(35, -40), Math.toRadians(-90))
+                .splineTo(new Vector2d(28, -40), Math.toRadians(-90))
                 .build();
         headSpot2 = drive.trajectoryBuilder(scoreRight4.end(), true)
-                .splineTo(new Vector2d(29, -40), Math.toRadians(-90))
+                .splineTo(new Vector2d(21, -40), Math.toRadians(-90))
                 .build();
 
         schedule(new SequentialCommandGroup(
@@ -70,22 +71,29 @@ public class AutoParkRedRight extends AutoOpModeBaseRed {
                         }},
                         ()-> headSpot
                 ),
-                new RunCommand(liftPivot::up, liftPivot),
-                new ElevatorExtendCommand(elevator).interruptOn(
-                    ()-> elevator.isExtended()
-                ),
                 new ParallelRaceGroup(
-                        new RunCommand(clampPivot::score, clampPivot),
-                        new SequentialCommandGroup(
-                                new WaitCommand(1000),
-                                new RunCommand(
-                                        clamp::open,clamp
-                                ),
-                                new WaitCommand(1000)
+                    new RunCommand(liftPivot::up, liftPivot),
+                    new SequentialCommandGroup(
+                        new ElevatorExtendCommand(elevator).interruptOn(
+                            ()-> (elevator.getDistance()> 800)
+                        ),
+                        new RunCommand(clampPivot::score, clampPivot).withTimeout(1000),
+                        new ElevatorRetractCommand(elevator).interruptOn(
+                                ()-> (elevator.getDistance()< 500)
+                        ),
+                        new ParallelRaceGroup(
+                                new RunCommand(clampPivot::score, clampPivot),
+                                new SequentialCommandGroup(
+                                        new WaitCommand(1000),
+                                        new RunCommand(
+                                                clamp::open,clamp
+                                        ),
+                                        new WaitCommand(1000)
+                                )
+
                         )
-
+                    )
                 )
-
 
         ));
     }
