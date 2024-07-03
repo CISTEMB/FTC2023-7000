@@ -23,7 +23,7 @@ public class ClampPivot extends SubsystemBase {
         if (elevator.getDistance()<700) {
             return;
         }
-        setAngle(108.75);
+        setAngle(95);
     }
     public void score(){
         if (elevator.getDistance()< 700) {

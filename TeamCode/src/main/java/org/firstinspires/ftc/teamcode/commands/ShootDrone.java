@@ -2,14 +2,14 @@ package org.firstinspires.ftc.teamcode.commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 
-import org.firstinspires.ftc.teamcode.subsystems.DroneLoader;
+import org.firstinspires.ftc.teamcode.subsystems.DroneLauncher;
 
-public class SetDroneLoaderAngleCommand extends CommandBase {
+public class ShootDrone extends CommandBase {
 
-    private DroneLoader pivot;
+    private DroneLauncher pivot;
     private double angle;
 
-    public SetDroneLoaderAngleCommand(DroneLoader pivot, double angle){
+    public ShootDrone(DroneLauncher pivot, double angle){
         this.pivot = pivot;
         this.angle = angle;
         addRequirements(pivot);
@@ -32,7 +32,5 @@ public class SetDroneLoaderAngleCommand extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-
     }
-
 }
